@@ -217,7 +217,7 @@ print("Best model saved as best_filesystem_model.pkl")
 
 
 # ==========================================================
-# 10 Leaderboard Graph
+# 10 Leaderboard Graph (Improved)
 # ==========================================================
 
 print("\nGenerating model leaderboard graph...")
@@ -227,80 +227,48 @@ results_df = pd.DataFrame({
     "R2 Score": list(results_overall.values())
 })
 
-results_df = results_df.sort_values(by="R2 Score", ascending=False)
+results_df = results_df.sort_values(by="R2 Score", ascending=True)
 
-sns.set_theme(style="whitegrid")
+plt.figure(figsize=(10,6))
 
-plt.figure(figsize=(8,5))
+sns.set_style("whitegrid")
 
-ax = sns.barplot(
-    data=results_df,
-    x="R2 Score",
-    y="Model",
-    palette="viridis"
+colors = sns.color_palette("viridis", len(results_df))
+
+bars = plt.barh(
+    results_df["Model"],
+    results_df["R2 Score"],
+    color=colors,
+    edgecolor="black"
 )
 
-for i, v in enumerate(results_df["R2 Score"]):
-    ax.text(v + 0.005, i, f"{v:.3f}", va="center")
+# Add value labels
+for bar in bars:
+    width = bar.get_width()
+    plt.text(
+        width + 0.005,
+        bar.get_y() + bar.get_height()/2,
+        f"{width:.3f}",
+        va='center',
+        fontsize=11
+    )
 
-plt.title("Filesystem Performance Model Leaderboard", fontsize=14, weight="bold")
+plt.title(
+    "Filesystem Performance Model Leaderboard",
+    fontsize=18,
+    weight="bold"
+)
 
-plt.xlabel("R² Score")
+plt.xlabel("R² Score", fontsize=13)
+plt.ylabel("Model", fontsize=13)
 
-plt.ylabel("Model")
+# Dynamic axis range
+plt.xlim(min(results_df["R2 Score"]) - 0.05, 1)
 
-plt.xlim(0.7,1)
+plt.grid(axis="x", linestyle="--", alpha=0.6)
 
 plt.tight_layout()
 
-plt.savefig("model_leaderboard.png", dpi=300)
+plt.savefig("model_leaderboard.png", dpi=400)
 
 plt.show()
-
-
-# ==========================================================
-# 11 Metric-wise Graphs
-# ==========================================================
-
-metrics = {
-    "Latency R²": latency_scores,
-    "Bandwidth R²": bandwidth_scores,
-    "IOPS R²": iops_scores
-}
-
-for metric_name, metric_scores in metrics.items():
-
-    metric_df = pd.DataFrame({
-        "Model": list(metric_scores.keys()),
-        "Score": list(metric_scores.values())
-    })
-
-    metric_df = metric_df.sort_values(by="Score", ascending=False)
-
-    plt.figure(figsize=(8,5))
-
-    ax = sns.barplot(
-        data=metric_df,
-        x="Score",
-        y="Model",
-        palette="mako"
-    )
-
-    for i, v in enumerate(metric_df["Score"]):
-        ax.text(v + 0.005, i, f"{v:.3f}", va="center")
-
-    plt.title(metric_name + " Comparison", fontsize=13)
-
-    plt.xlabel("R² Score")
-
-    plt.ylabel("Model")
-
-    plt.xlim(0.7,1)
-
-    plt.tight_layout()
-
-    filename = metric_name.replace(" ", "_").lower() + ".png"
-
-    plt.savefig(filename, dpi=300)
-
-    plt.show()
