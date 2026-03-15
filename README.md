@@ -9,3 +9,8 @@ models. Several tree-based machine learning algorithms were evaluated and compar
 standard performance metrics. Experimental results demonstrate that gradient boosting based 
 models provide superior predictive accuracy for this problem. The project establishes a foundation 
 for building an automated filesystem configuration optimization system.
+
+How to use:
+
+1. Train your model using the Adaptive_optimization.py script: It generates a best_filesystem_model.pkl file.
+2. Use this trained model to predict the best set of parameters using the optimizer.py script. It takes in input as the workload type, security level and the number of iterations
