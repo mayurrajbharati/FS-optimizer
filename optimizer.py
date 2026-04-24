@@ -134,7 +134,7 @@ def evaluate_configuration(config):
 # 7 Optimization Loop
 # ==========================================
 
-def optimize_filesystem(workload, security_level, iterations=500):
+def optimize_filesystem(workload, security_level, iterations=1000):
 
     best_score = -np.inf
     best_config = None
@@ -195,7 +195,9 @@ while True:
         print("Invalid security level.")
 
 
-iterations = int(input("\nEnter optimization iterations (recommended 1000): "))
+user_input = input("\nEnter optimization iterations (default 1000): ").strip()
+
+iterations = int(user_input) if user_input else 1200
 
 
 # ==========================================
