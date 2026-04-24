@@ -195,11 +195,6 @@ while True:
         print("Invalid security level.")
 
 
-user_input = input("\nEnter optimization iterations (default 1000): ").strip()
-
-iterations = int(user_input) if user_input else 1200
-
-
 # ==========================================
 # 9 Run Optimization
 # ==========================================
@@ -209,7 +204,7 @@ print("\nRunning optimization...")
 best_config, metrics = optimize_filesystem(
     workload,
     security_level,
-    iterations
+    1200
 )
 
 
